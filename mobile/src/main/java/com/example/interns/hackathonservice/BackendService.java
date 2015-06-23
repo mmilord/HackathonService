@@ -6,6 +6,10 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.util.Log;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 public class BackendService extends Service {
 
     private static final String TAG = "BackendService";
@@ -44,6 +48,16 @@ public class BackendService extends Service {
                     }
                 }*/
 
+                ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+
+                scheduler.scheduleAtFixedRate (new Runnable() {
+                    public void run() {
+                        //startService(intent);
+                        NotificationSender();
+
+                    }
+                }, 0, 20, TimeUnit.SECONDS);
+
                 System.out.println("hi" + SystemClock.currentThreadTimeMillis());
 
                 //Stop service once it finishes its task
@@ -52,6 +66,12 @@ public class BackendService extends Service {
         }).start();
 
         return Service.START_STICKY;
+    }
+
+    public void NotificationSender(){
+        System.out.println("asdf" + SystemClock.currentThreadTimeMillis());
+        NotificationBuilder n = new NotificationBuilder(this, new Intent(BackendService.this, NotificationBuilder.class));
+        n.NewNotification("asdf");
     }
 
 
