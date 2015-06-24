@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">HackathonService</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <string name="APIKey">34aae6773a01ce1756979f510dff96b9</string>
 </resources>

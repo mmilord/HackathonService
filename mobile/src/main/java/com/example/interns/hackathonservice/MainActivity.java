@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.view.View;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -34,8 +35,11 @@ public class MainActivity extends Activity {
     public void NotificationSender(){
         System.out.println("asdf" + SystemClock.currentThreadTimeMillis());
         NotificationBuilder n = new NotificationBuilder(this, new Intent(MainActivity.this, NotificationBuilder.class));
-        n.NewNotification("asdf");
+        n.NewNotification("Weather Alert Nearby!", "14.1 Earthquake reported in your area!");
     }
 
-
+    public void onClick(View view) {
+        Intent intent = new Intent(MainActivity.this, BackendService.class);
+        stopService(intent);
+    }
 }

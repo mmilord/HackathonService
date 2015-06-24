@@ -22,10 +22,10 @@ public class NotificationBuilder {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
     }
 
-    public void NewNotification(String alertMessage) {
+    public void NewNotification(String alertTitle, String alertMessage) {
         Notification n  = new Notification.Builder(context)
-                .setContentTitle("New mail from " + "test@gmail.com")
-                .setContentText("Subject")
+                .setContentTitle("Hazard Nearby!")
+                .setContentText(alertMessage)
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(false).build();
