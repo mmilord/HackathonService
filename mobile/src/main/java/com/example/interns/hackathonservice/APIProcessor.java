@@ -51,10 +51,13 @@ public class APIProcessor implements LocationListener {
             WeatherManager.GetWeatherData(new LatLng(currentBestLocation.getLatitude(), currentBestLocation.getLongitude()));
     }
 
+    public LatLng getLatLng () {
+        return new LatLng(currentBestLocation.getLatitude(), currentBestLocation.getLongitude());
+    }
+
     private Location getLastBestLocation() {
         Location locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         Location locationNet = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
 
 
         long GPSLocationTime = 0;
