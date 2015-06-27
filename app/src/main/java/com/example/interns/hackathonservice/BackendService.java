@@ -72,11 +72,11 @@ public class BackendService extends Service {
                     public void run() {
                         //startService(intent);
                         Log.d(TAG, "backround");
-                        NotificationSender();
+
                         apiProcessor.updateLocation();
 
                     }
-                }, 0, 1, TimeUnit.MINUTES);
+                }, 0, 2, TimeUnit.MINUTES);
 
                 System.out.println("hi" + SystemClock.currentThreadTimeMillis());
 
@@ -125,7 +125,7 @@ public class BackendService extends Service {
             String latitude = "Latitude: " + loc.getLatitude();
             Log.v(TAG, latitude);
 
-            WeatherManager.GetWeatherData(new LatLng(loc.getLatitude(), loc.getLongitude()));
+            //WeatherManager.GetWeatherData(new LatLng(loc.getLatitude(), loc.getLongitude()));
 
         /*------- To get city name from coordinates -------- */
             String cityName = null;

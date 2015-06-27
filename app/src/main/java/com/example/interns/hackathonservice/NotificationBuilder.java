@@ -5,6 +5,9 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.PictureDrawable;
 import android.support.v4.app.NotificationCompat;
 
 /**
@@ -23,10 +26,15 @@ public class NotificationBuilder {
     }
 
     public void NewNotification(String alertTitle, String alertMessage) {
+
+        Bitmap btimap = (((BitmapDrawable)context.getResources().getDrawable(R.drawable.thunder)).getBitmap());
+        Bitmap btimap2 = (((BitmapDrawable)context.getResources().getDrawable(R.drawable.ic_launcher)).getBitmap());
+
         Notification n  = new Notification.Builder(context)
                 .setContentTitle("Hazard Nearby!")
                 .setContentText(alertMessage)
-                .setSmallIcon(R.drawable.ic_launcher)
+                .setLargeIcon(btimap)
+                .setSmallIcon(R.drawable.thunder)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(false).build();
 

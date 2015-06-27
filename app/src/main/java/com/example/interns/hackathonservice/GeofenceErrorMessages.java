@@ -1,4 +1,5 @@
-package com.example.admin.hackathon; /**
+package com.example.interns.hackathonservice;
+/**
  * Copyright 2014 Google Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +19,6 @@ package com.example.admin.hackathon; /**
 import android.content.Context;
 import android.content.res.Resources;
 
-import com.example.admin.hackathon.R;
 import com.google.android.gms.location.GeofenceStatusCodes;
 
 /**

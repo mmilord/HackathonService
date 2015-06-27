@@ -1,5 +1,6 @@
 package com.example.interns.hackathonservice;
 
+import android.nfc.Tag;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -11,6 +12,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -29,10 +31,22 @@ public class WeatherManager {
         JSONObject jsonObject = null;
         try{
             jsonObject = new JSONObject(getJSON(parseURL(geoData)));
-            Log.i(MainActivity.class.getName(), jsonObject.getString("sunrise"));
+            //Log.i(MainActivity.class.getName(), jsonObject.getString("sunrise"));
         } catch(Exception e){e.printStackTrace();}
 
         return jsonObject;
+    }
+
+    public static String parseWeatherJSON (JSONObject weatherData, String key) {
+        String data = "";
+
+        try {
+            data = weatherData.get(key).toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+      //  Log.d("asdf", "parse weather json");
+        return data;
     }
 
     public static String getJSON(String address){
@@ -66,12 +80,14 @@ public class WeatherManager {
         String parsedURL = "";
 
         parsedURL = "http://api.weather.com/v1/geocode/34.063/-84.217/observations/current.json?apiKey=34aae6773a01ce1756979f510dff96b9&language=en-US&units=e";
-        parsedURL = "http://api.weather.com/v1/geocode/" + geoData.latitude + "/" +
-                geoData.longitude + "/observations/current.json?apiKey=" +
-                "34aae6773a01ce1756979f510dff96b9" + "&language=en-US&units=e";
-
+        //parsedURL = "http://api.weather.com/v1/geocode/" + geoData.latitude + "/" +
+            //    geoData.longitude + "/observations/current.json?apiKey=" +
+              //  "34aae6773a01ce1756979f510dff96b9" + "&language=en-US&units=e";
+        // http://api.weather.com/v1/geocode/34.063/-84.217/observations/current.json?apiKey={apikey}&language=en-US&units=m
         // http://api.weather.com/v1/geocode/34.063/-84.217/observations/current.xml?apiKey={apikey}&language=en-US&units=e
 
         return parsedURL;
     }
+
+
 }

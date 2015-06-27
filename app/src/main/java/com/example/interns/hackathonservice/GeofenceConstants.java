@@ -1,4 +1,4 @@
-package com.example.admin.hackathon;
+package com.example.interns.hackathonservice;
 
 /**
  * Created by admin on 6/23/15.

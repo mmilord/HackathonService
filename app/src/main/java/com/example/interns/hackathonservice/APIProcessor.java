@@ -13,11 +13,13 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
-import com.google.android.gms.maps.model.LatLng;
-
 import org.json.JSONObject;
-
+import com.google.android.gms.maps.model.LatLng;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -32,11 +34,15 @@ public class APIProcessor implements LocationListener {
     static final int TWO_MINUTES = 1000 * 60 * 2;
     JSONObject weatherData;
     final static String TAG = "asdf";
+    int counter = 1;
+    GeofenceManager geofenceManager;
 
     public APIProcessor(Context context, Intent intent, LocationManager locationManager) {
         this.context = context;
         this.intent = intent;
         this.locationManager = locationManager;
+        geofenceManager = new GeofenceManager(context);
+       // geofenceManager.addGeofence("Weather Channel", new LatLng(33.89371, -84.460316));
     }
 
     public void initAPIChain(Context context) {
@@ -47,8 +53,49 @@ public class APIProcessor implements LocationListener {
 
     public void updateLocation(){
         getLastBestLocation();
-        if(currentBestLocation != null)
-            WeatherManager.GetWeatherData(new LatLng(currentBestLocation.getLatitude(), currentBestLocation.getLongitude()));
+        if(currentBestLocation != null) {
+            LatLng latLong = new LatLng(currentBestLocation.getLatitude(), currentBestLocation.getLongitude());
+
+            ArrayList<InclementWeatherObject> inclementWeatherObjectArrayList = FloodLocationAPI.getPossibleFloodLocations(new LatLng(currentBestLocation.getLatitude(), currentBestLocation.getLongitude()));
+
+            inclementWeatherObjectArrayList = weatherCheck(inclementWeatherObjectArrayList);
+
+            geofenceManager.addGeofenceList(inclementWeatherObjectArrayList);
+
+            //send map to GeofenceManager
+
+            if (counter == 1)
+                WeatherManager.GetWeatherData(latLong);
+            else if (counter == 10)
+                counter = 0;
+            counter++;
+        }
+    }
+
+    public ArrayList<InclementWeatherObject> weatherCheck (ArrayList<InclementWeatherObject> inclementWeatherObjectArrayList) {
+        ArrayList<InclementWeatherObject> tempData = new ArrayList<>();
+
+        for (InclementWeatherObject inclementWeatherObject : inclementWeatherObjectArrayList) {
+            JSONObject weatherData = WeatherManager.GetWeatherData(inclementWeatherObject.getLatLong());
+            JSONObject imp = null /*I'manasshole*/;
+            try {
+                JSONObject temo = new JSONObject(WeatherManager.parseWeatherJSON(weatherData, "observation"));
+                imp = new JSONObject(WeatherManager.parseWeatherJSON(temo, "imperial"));
+            }
+            catch (Exception e){
+                //TODO
+            }
+
+            if (Integer.parseInt(WeatherManager.parseWeatherJSON(imp, "precip_1hour")) >=
+                    inclementWeatherObject.getHourRainFall() ||
+                    (Integer.parseInt(WeatherManager.parseWeatherJSON(imp, "precip_6hour")) >=
+                            inclementWeatherObject.getMultiHourRainFall()) ||
+                    (Integer.parseInt(WeatherManager.parseWeatherJSON(imp, "wspd"))) >= 30) {
+                tempData.add(inclementWeatherObject);
+            }
+        }
+
+        return tempData;
     }
 
     public LatLng getLatLng () {
